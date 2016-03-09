@@ -10,6 +10,7 @@ $userpicdir = "/var/www/html/tanqin/data/user/";
 switch ($verb) {
     case 'GET' :
         $tid = $_GET ["tid"];
+        $fid = $_GET ["fid"];
         $frompage = $_GET ["from"];
         $topage = $_GET ["to"];
         $link = mysql_connect ( 'localhost', 'root', 'welcome1' ) or die ( 'Could not connect: ' . mysql_error () );
@@ -22,7 +23,11 @@ switch ($verb) {
             }
             $offset = $topage - $frompage;
             
-            $query = "select tid, fid, authorid, author, message from pre_forum_post order by position desc LIMIT $frompage, $offset";
+            if ($fid == null) {
+                $query = "select tid, fid, authorid, author, message from pre_forum_post order by position desc LIMIT $frompage, $offset";
+            } else {
+                $query = "select tid, fid, authorid, author, message from pre_forum_post where fid=$fid order by position desc LIMIT $frompage, $offset";
+            }
             $tinfo = mysql_query ( $query ) or die ( 'Query failed: ' . mysql_error () );
             
             $data = array ();
@@ -46,6 +51,8 @@ switch ($verb) {
                 $videopath = "";
                 $previewimage = "";
                 $index = 0;
+                $videopattern = '/video/';
+                $previewpattern = '/videopreview/';
                 
                 while ( $attachmentrow = mysql_fetch_array ( $attachmentresult ) ) {
                     $path = $attachmentrow ['dir'];
@@ -53,12 +60,12 @@ switch ($verb) {
                     $arrlength = count ( $attachfiles );
                     for($x = 0; $x < $arrlength; $x ++) {
                         $file = $attachfiles [$x];
-                        if (is_dir ( $file )) {
-                            if ($file == $path . "/video") {
+                        if (is_dir ( $file ) || preg_match ( $videopattern, $file ) || preg_match ( $previewpattern, $file )) {
+                            if ($file == $path . "video") {
                                 $videopath = dir_list ( $file ) [0];
                                 $videopath = substr ( $videopath, strlen ( $positivepath ) );
                             }
-                            if ($file == $path . "/videopreview") {
+                            if ($file == $path . "videopreview") {
                                 $previewimage = dir_list ( $file ) [0];
                                 $previewimage = substr ( $previewimage, strlen ( $positivepath ) );
                             }
@@ -109,6 +116,8 @@ switch ($verb) {
             $videopath = "";
             $previewimage = "";
             $index = 0;
+            $videopattern = '/video/';
+            $previewpattern = '/videopreview/';
             
             while ( $attachmentrow = mysql_fetch_array ( $attachmentresult ) ) {
                 $path = $attachmentrow ['dir'];
@@ -116,12 +125,12 @@ switch ($verb) {
                 $arrlength = count ( $attachfiles );
                 for($x = 0; $x < $arrlength; $x ++) {
                     $file = $attachfiles [$x];
-                    if (is_dir ( $file )) {
-                        if ($file == $path . "/video") {
+                    if (is_dir ( $file ) || preg_match ( $videopattern, $file ) || preg_match ( $previewpattern, $file )) {
+                        if ($file == $path . "video") {
                             $videopath = dir_list ( $file ) [0];
                             $videopath = substr ( $videopath, strlen ( $positivepath ) );
                         }
-                        if ($file == $path . "/videopreview") {
+                        if ($file == $path . "videopreview") {
                             $previewimage = dir_list ( $file ) [0];
                             $previewimage = substr ( $previewimage, strlen ( $positivepath ) );
                         }
@@ -188,7 +197,17 @@ switch ($verb) {
             mysql_select_db ( 'tanqindb' ) or die ( 'Could not select database' );
             
             $insertupquery = "insert into pre_up_tbl (tid, authorid, author) values ('$tid', '$userid','$username')";
-            $result = mysql_query ( $insertupquery ) or die ( 'Query failed: ' . mysql_error () );
+            $selectupquery = "select * from pre_up_tbl where tid = $tid and authorid = $userid and author= '$username'";
+            $removeupquery = "delete from pre_up_tbl where tid = $tid and authorid = $userid and author= '$username'";
+            $result = mysql_query ( $selectupquery ) or die ( 'Query failed: ' . mysql_error () );
+            $row = mysql_fetch_array ( $result );
+            
+            if (empty ( $row )) {
+                $result = mysql_query ( $insertupquery ) or die ( 'Query failed: ' . mysql_error () );
+            } else {
+                $result = mysql_query ( $removeupquery ) or die ( 'Query failed: ' . mysql_error () );
+            }
+            
             $data = array (
                     'result' => "success" 
             );
@@ -225,18 +244,22 @@ switch ($verb) {
             
             if (isset ( $video )) {
                 if (file_exists ( $attachmentdir )) {
+                    mkdir ( $attachmentdir . "video/" );
                     move_uploaded_file ( $video ["tmp_name"], $attachmentdir . "video/" . $video ["name"] );
                 } else {
                     mkdir ( $attachmentdir );
+                    mkdir ( $attachmentdir . "video/" );
                     move_uploaded_file ( $video ["tmp_name"], $attachmentdir . "video/" . $video ["name"] );
                 }
             }
             
             if (isset ( $videopreviewimage )) {
                 if (file_exists ( $attachmentdir )) {
+                    mkdir ( $attachmentdir . "videopreview/" );
                     move_uploaded_file ( $videopreviewimage ["tmp_name"], $attachmentdir . "videopreview/" . $videopreviewimage ["name"] );
                 } else {
                     mkdir ( $attachmentdir );
+                    mkdir ( $attachmentdir . "videopreview/" );
                     move_uploaded_file ( $videopreviewimage ["tmp_name"], $attachmentdir . "videopreview/" . $videopreviewimage ["name"] );
                 }
             }

@@ -9,6 +9,10 @@ $test = array (
         "arraytest" => $age 
 );
 
+$videopattern = '/video/';
+$previewpattern = '/videopreview/';
+
+
 // insert into pre_comments (tid, author, authorid, comment, replyauthor, replyauthorid) values (1, "guoliang", 123456, "looks good to me", "wgl", 321);
 $link = mysql_connect ( 'localhost', 'root', 'welcome1' ) or die ( 'Could not connect: ' . mysql_error () );
 mysql_select_db ( 'tanqindb' ) or die ( 'Could not select database' );
