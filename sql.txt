@@ -1,0 +1,206 @@
+测试用例：
+1.发帖测试
+(1)Precodition：服务器端给定用户编号userid 1 username a userpic /test/pic1.png
+(2)发帖
+发三张图片加文本
+(3)期望结果：
+返回帖子列表列表中刚刚发布的帖子打开显示对应的帖子内容，评论，点赞都为空
+2评论测试
+(1)precondition 1 测试通过
+（2）评论：
+发一条评论
+（3）期望结果：帖子列表刷新评论显示a做的评论
+3.点赞测试
+(1)precondition服务器端给定用户编号userid 1 username a userpic “test/pic1.png”
+(2)点赞
+自己给自己点赞
+(3)期望结果：帖子列表刷新评论评论显示a点的赞
+
+ $tid           =$_POST['tid']             ;
+ $userid        =$_POST['userid']          ;
+ $username      =$_POST['username']        ;
+ $comment       =$_POST['comment']         ;
+ $replyauthor   =$_POST['replyauthor']     ;
+ $replyauthorid =$_POST['replyauthorid']   ;
+ 
+ 
+ 
+ //发评论
+http://120.24.16.24/tanqin/forum.php?action=newcomment
+{ 
+  "tid": "1",
+  "userid": "1",
+  "username": "guoliang",
+  "comment": "testupload",
+  "replyauthor": "",         
+  "replyauthorid":"",   
+}
+
+POST /tanqin/forum.php?action=newcomment HTTP/1.1
+Host: 120.24.16.24
+Cache-Control: no-cache
+Postman-Token: 3333f3f5-df5b-1e37-4315-99567968c4df
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="userid"
+
+1
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="username"
+
+guoliang
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="tid"
+
+2
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="comment"
+
+great success
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="replyauthor"
+
+leo
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="replyauthorid"
+
+333
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+
+//点赞
+http://120.24.16.24/tanqin/forum.php?action=newup
+{ 
+  "tid": "1",
+  "userid": "1",
+  "username": "guoliang",
+}
+
+POST /tanqin/forum.php?action=newup HTTP/1.1
+Host: 120.24.16.24
+Cache-Control: no-cache
+Postman-Token: c9f6241c-6398-653f-d678-136a8e8dd3ed
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="userid"
+
+1
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="username"
+
+guoliang
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="tid"
+
+2
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+
+
+pre_forum_post
+
+create database tanqindb;
+
+
+帖子表
+
+CREATE TABLE pre_forum_post(
+pid         int(10) unsigned         NOT NULL,               
+fid         mediumint(8) unsigned    NOT NULL,               
+tid         mediumint(8) unsigned    NOT NULL,               
+first       tinyint(1)               NOT NULL,               
+author      varchar(15)              NOT NULL,               
+authorid    mediumint(8) unsigned    NOT NULL,               
+subject     varchar(80)              NOT NULL,               
+dateline    int(10) unsigned         NOT NULL,               
+message     mediumtext               NOT NULL,               
+useip       varchar(15)              NOT NULL,               
+port        smallint(6) unsigned     NOT NULL,               
+invisible   tinyint(1)               NOT NULL,               
+anonymous   tinyint(1)               NOT NULL,               
+usesig      tinyint(1)               NOT NULL,               
+htmlon      tinyint(1)               NOT NULL,               
+bbcodeoff   tinyint(1)               NOT NULL,               
+smileyoff   tinyint(1)               NOT NULL,               
+parseurloff tinyint(1)               NOT NULL,               
+attachment  tinyint(1)               NOT NULL,               
+rate        smallint(6)              NOT NULL,               
+ratetimes   tinyint(3) unsigned      NOT NULL,               
+status      int(10)                  NOT NULL,               
+tags        varchar(255)             NOT NULL,               
+comment     tinyint(1)               NOT NULL,               
+replycredit int(10)                  NOT NULL,               
+position    int(8) unsigned          NOT NULL AUTO_INCREMENT,
+PRIMARY KEY ( position )
+);
+
+
+
+CREATE TABLE pre_comments(
+commentid   int(8) unsigned          NOT NULL AUTO_INCREMENT,              
+tid         mediumint(8) unsigned    NOT NULL,                          
+author      varchar(15)              NOT NULL,               
+authorid    mediumint(8) unsigned    NOT NULL,                     
+comment     mediumtext               NOT NULL,               
+replyauthor      varchar(15)              NOT NULL,               
+replyauthorid    mediumint(8) unsigned    NOT NULL,                             
+PRIMARY KEY ( commentid )
+);
+
+CREATE TABLE pre_up_tbl(         
+tid         mediumint(8) unsigned    NOT NULL,                          
+author      varchar(15)              NOT NULL,               
+authorid    mediumint(8) unsigned    NOT NULL,                                                
+upid int(8) unsigned          NOT NULL AUTO_INCREMENT,
+PRIMARY KEY ( upid )
+);
+
+CREATE TABLE pre_attachments(         
+tid         mediumint(8) unsigned    NOT NULL,                          
+dir         varchar(100) NOT NULL,
+PRIMARY KEY ( tid )
+);
+
+CREATE TABLE pre_user_tbl(                                 
+username      varchar(15)              NOT NULL,               
+userid    mediumint(8) unsigned    NOT NULL AUTO_INCREMENT,                                               
+userpic   varchar(100), 
+email     varchar(40) NOT NULL, 
+password   varchar(32) NOT NULL, 
+PRIMARY KEY ( userid )
+);
+insert into pre_user_tbl (username, email, password) values ("guoliang", "guoliang@lenovo.com", "123456");
+
+pre_forum_forum 版块表
+
+fid mediumint(8) unsigned        NO 是    论坛id
+fup mediumint(8) unsigned    0   NO      上级论坛id
+type    enum('group','forum','sub')  forum   NO      类型 (group:分类 forum:普通论坛 sub:子论坛)
+name    char(50)         NO      名称
+CREATE TABLE pre_forum_forum(
+fid mediumint(8) unsigned   NOT NULL,
+fup mediumint(8) unsigned   NOT NULL,
+type varchar(40) NOT NULL,
+name char(50) NOT NULL,
+PRIMARY KEY ( fid )
+)ENGINE=InnoDB DEFAULT CHARSET=utf8; 
+解决中文显示问题。
+板块分为show 成人学琴 求谱 初学问答
+这个我写在文档里 id对应0 1 2 3 4啊
+
+insert into pre_forum_forum (fid, fup, type, name) values ("0", "0", "forum", "show");
+insert into pre_forum_forum (fid, fup, type, name) values ("1", "1", "forum", "成人学琴");
+insert into pre_forum_forum (fid, fup, type, name) values ("2", "2", "forum", "求谱");
+insert into pre_forum_forum (fid, fup, type, name) values ("3", "3", "forum", "初学问答");
+
+
+CREATE TABLE pre_home_friend (
+
+fuid    mediumint(8) unsigned   NOT NULL,
+fup mediumint(8) unsigned   NOT NULL,
+type varchar(40) NOT NULL,
+name char(50) NOT NULL,
+PRIMARY KEY ( fid )
+)ENGINE=InnoDB DEFAULT CHARSET=utf8; 
