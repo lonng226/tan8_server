@@ -62,10 +62,17 @@ switch ($verb) {
                 );
             } else {
                 while ( $row = mysql_fetch_array ( $result ) ) {
+                    $uprofile = $row ['userpic'];
+                    if (is_null ( $uprofile )) {
+                        $uprofile = "";
+                    } else {
+                        $uprofile = substr ( $row ['userpic'], strlen ( $positivepath ) );
+                    }
+                    
                     $data = array (
                             "uid" => $row ['userid'],
                             "uname" => $row ['username'],
-                            "uprofile" => substr ( $row ['userpic'], strlen ( $positivepath ) ) 
+                            "uprofile" => $uprofile 
                     );
                 }
             }
