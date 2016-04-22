@@ -1,20 +1,20 @@
-²âÊÔÓÃÀı£º
-1.·¢Ìû²âÊÔ
-(1)Precodition£º·şÎñÆ÷¶Ë¸ø¶¨ÓÃ»§±àºÅuserid 1 username a userpic /test/pic1.png
-(2)·¢Ìû
-·¢ÈıÕÅÍ¼Æ¬¼ÓÎÄ±¾
-(3)ÆÚÍû½á¹û£º
-·µ»ØÌû×ÓÁĞ±íÁĞ±íÖĞ¸Õ¸Õ·¢²¼µÄÌû×Ó´ò¿ªÏÔÊ¾¶ÔÓ¦µÄÌû×ÓÄÚÈİ£¬ÆÀÂÛ£¬µãÔŞ¶¼Îª¿Õ
-2ÆÀÂÛ²âÊÔ
-(1)precondition 1 ²âÊÔÍ¨¹ı
-£¨2£©ÆÀÂÛ£º
-·¢Ò»ÌõÆÀÂÛ
-£¨3£©ÆÚÍû½á¹û£ºÌû×ÓÁĞ±íË¢ĞÂÆÀÂÛÏÔÊ¾a×öµÄÆÀÂÛ
-3.µãÔŞ²âÊÔ
-(1)precondition·şÎñÆ÷¶Ë¸ø¶¨ÓÃ»§±àºÅuserid 1 username a userpic ¡°test/pic1.png¡±
-(2)µãÔŞ
-×Ô¼º¸ø×Ô¼ºµãÔŞ
-(3)ÆÚÍû½á¹û£ºÌû×ÓÁĞ±íË¢ĞÂÆÀÂÛÆÀÂÛÏÔÊ¾aµãµÄÔŞ
+æµ‹è¯•ç”¨ä¾‹ï¼š
+1.å‘å¸–æµ‹è¯•
+(1)Precoditionï¼šæœåŠ¡å™¨ç«¯ç»™å®šç”¨æˆ·ç¼–å·userid 1 username a userpic /test/pic1.png
+(2)å‘å¸–
+å‘ä¸‰å¼ å›¾ç‰‡åŠ æ–‡æœ¬
+(3)æœŸæœ›ç»“æœï¼š
+è¿”å›å¸–å­åˆ—è¡¨åˆ—è¡¨ä¸­åˆšåˆšå‘å¸ƒçš„å¸–å­æ‰“å¼€æ˜¾ç¤ºå¯¹åº”çš„å¸–å­å†…å®¹ï¼Œè¯„è®ºï¼Œç‚¹èµéƒ½ä¸ºç©º
+2è¯„è®ºæµ‹è¯•
+(1)precondition 1 æµ‹è¯•é€šè¿‡
+ï¼ˆ2ï¼‰è¯„è®ºï¼š
+å‘ä¸€æ¡è¯„è®º
+ï¼ˆ3ï¼‰æœŸæœ›ç»“æœï¼šå¸–å­åˆ—è¡¨åˆ·æ–°è¯„è®ºæ˜¾ç¤ºaåšçš„è¯„è®º
+3.ç‚¹èµæµ‹è¯•
+(1)preconditionæœåŠ¡å™¨ç«¯ç»™å®šç”¨æˆ·ç¼–å·userid 1 username a userpic â€œtest/pic1.pngâ€
+(2)ç‚¹èµ
+è‡ªå·±ç»™è‡ªå·±ç‚¹èµ
+(3)æœŸæœ›ç»“æœï¼šå¸–å­åˆ—è¡¨åˆ·æ–°è¯„è®ºè¯„è®ºæ˜¾ç¤ºaç‚¹çš„èµ
 
  $tid           =$_POST['tid']             ;
  $userid        =$_POST['userid']          ;
@@ -25,7 +25,7 @@
  
  
  
- //·¢ÆÀÂÛ
+ //å‘è¯„è®º
 http://120.24.16.24/tanqin/forum.php?action=newcomment
 { 
   "tid": "1",
@@ -69,7 +69,7 @@ Content-Disposition: form-data; name="replyauthorid"
 ----WebKitFormBoundary7MA4YWxkTrZu0gW
 
 
-//µãÔŞ
+//ç‚¹èµ
 http://120.24.16.24/tanqin/forum.php?action=newup
 { 
   "tid": "1",
@@ -104,7 +104,7 @@ pre_forum_post
 create database tanqindb;
 
 
-Ìû×Ó±í
+å¸–å­è¡¨
 
 CREATE TABLE pre_forum_post(
 pid         int(10) unsigned         NOT NULL,               
@@ -149,6 +149,8 @@ replyauthorid    mediumint(8) unsigned    NOT NULL,
 PRIMARY KEY ( commentid )
 );
 
+insert into pre_comments (tid, authorid, author, comment, replyauthor, replyauthorid) values ('2', '333','guoliang', 'test', 'test','444');
+
 CREATE TABLE pre_up_tbl(         
 tid         mediumint(8) unsigned    NOT NULL,                          
 author      varchar(15)              NOT NULL,               
@@ -173,12 +175,12 @@ PRIMARY KEY ( userid )
 );
 insert into pre_user_tbl (username, email, password) values ("guoliang", "guoliang@lenovo.com", "123456");
 
-pre_forum_forum °æ¿é±í
+pre_forum_forum ç‰ˆå—è¡¨
 
-fid mediumint(8) unsigned        NO ÊÇ    ÂÛÌ³id
-fup mediumint(8) unsigned    0   NO      ÉÏ¼¶ÂÛÌ³id
-type    enum('group','forum','sub')  forum   NO      ÀàĞÍ (group:·ÖÀà forum:ÆÕÍ¨ÂÛÌ³ sub:×ÓÂÛÌ³)
-name    char(50)         NO      Ãû³Æ
+fid mediumint(8) unsigned        NO æ˜¯    è®ºå›id
+fup mediumint(8) unsigned    0   NO      ä¸Šçº§è®ºå›id
+type    enum('group','forum','sub')  forum   NO      ç±»å‹ (group:åˆ†ç±» forum:æ™®é€šè®ºå› sub:å­è®ºå›)
+name    char(50)         NO      åç§°
 CREATE TABLE pre_forum_forum(
 fid mediumint(8) unsigned   NOT NULL,
 fup mediumint(8) unsigned   NOT NULL,
@@ -186,21 +188,98 @@ type varchar(40) NOT NULL,
 name char(50) NOT NULL,
 PRIMARY KEY ( fid )
 )ENGINE=InnoDB DEFAULT CHARSET=utf8; 
-½â¾öÖĞÎÄÏÔÊ¾ÎÊÌâ¡£
-°å¿é·ÖÎªshow ³ÉÈËÑ§ÇÙ ÇóÆ× ³õÑ§ÎÊ´ğ
-Õâ¸öÎÒĞ´ÔÚÎÄµµÀï id¶ÔÓ¦0 1 2 3 4°¡
+è§£å†³ä¸­æ–‡æ˜¾ç¤ºé—®é¢˜ã€‚
+æ¿å—åˆ†ä¸ºshow æˆäººå­¦ç´ æ±‚è°± åˆå­¦é—®ç­”
+è¿™ä¸ªæˆ‘å†™åœ¨æ–‡æ¡£é‡Œ idå¯¹åº”0 1 2 3 4å•Š
 
 insert into pre_forum_forum (fid, fup, type, name) values ("0", "0", "forum", "show");
-insert into pre_forum_forum (fid, fup, type, name) values ("1", "1", "forum", "³ÉÈËÑ§ÇÙ");
-insert into pre_forum_forum (fid, fup, type, name) values ("2", "2", "forum", "ÇóÆ×");
-insert into pre_forum_forum (fid, fup, type, name) values ("3", "3", "forum", "³õÑ§ÎÊ´ğ");
+insert into pre_forum_forum (fid, fup, type, name) values ("1", "1", "forum", "æˆäººå­¦ç´");
+insert into pre_forum_forum (fid, fup, type, name) values ("2", "2", "forum", "æ±‚è°±");
+insert into pre_forum_forum (fid, fup, type, name) values ("3", "3", "forum", "åˆå­¦é—®ç­”");
 
 
-CREATE TABLE pre_home_friend (
-
-fuid    mediumint(8) unsigned   NOT NULL,
-fup mediumint(8) unsigned   NOT NULL,
-type varchar(40) NOT NULL,
-name char(50) NOT NULL,
-PRIMARY KEY ( fid )
+CREATE TABLE pre_attention_tbl (
+rid   int(8) unsigned          NOT NULL AUTO_INCREMENT,
+uid    mediumint(8) unsigned    NOT NULL,
+followerid    mediumint(8) unsigned    NOT NULL,
+PRIMARY KEY ( rid )
 )ENGINE=InnoDB DEFAULT CHARSET=utf8; 
+insert into pre_attention_tbl (uid, followerid) values (1, 7);
+insert into pre_attention_tbl (uid, followerid) values (1, 2);
+insert into pre_attention_tbl (uid, followerid) values (1, 15);
+insert into pre_attention_tbl (uid, followerid) values (7, 15);
+insert into pre_attention_tbl (uid, followerid) values (7, 2);
+
+select max(tid) from pre_forum_post; å–æœ€å¤§çš„æ•°å­—
+
+//åˆ é™¤è¡¨æ ¼
+delete from pre_attachments    ;
+delete from pre_attention_tbl  ;
+delete from pre_comments       ;
+delete from pre_forum_forum    ;
+delete from pre_forum_post     ;
+delete from pre_up_tbl         ;
+delete from pre_user_tbl       ;
+//æŸ¥çœ‹å»ºè¡¨æƒ…å†µ
+show create table pre_attachments  ;
+show create table pre_attention_tbl;
+show create table pre_comments     ;
+show create table pre_forum_forum  ;
+show create table pre_forum_post   ;
+show create table pre_up_tbl       ;
+show create table pre_user_tbl     ;
+
+//ä¿®æ”¹å­—ç¬¦é›†
+ALTER table pre_attachments   DEFAULT CHARACTER SET utf8;
+ALTER table pre_attention_tbl DEFAULT CHARACTER SET utf8;
+ALTER table pre_comments      DEFAULT CHARACTER SET utf8;
+ALTER table pre_forum_forum   DEFAULT CHARACTER SET utf8;
+ALTER table pre_forum_post    DEFAULT CHARACTER SET utf8;
+ALTER table pre_up_tbl        DEFAULT CHARACTER SET utf8;
+ALTER table pre_user_tbl      DEFAULT CHARACTER SET utf8;
+
+ALTER TABLE pre_forum_post DEFAULT CHARACTER SET utf8;
+
+alter table pre_comments add column datetime TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+alter table pre_forum_post add column datetime TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+interface 18##################################################
+
+select * from (select a.tid, b.userid, from pre_forum_post as a right join pre_user_tbl as b on a.authorid = b.userid) as temp;
+
+select * from (select a.tid, b.* from pre_forum_post as a right join pre_user_tbl as b on a.authorid = b.userid) as temp
+
+select count(tid) as counttid, authorid as userid from pre_forum_post group by authorid; 
+
+select sum(sumup) as sumup, temp.authorid as userid from (select count(tid) as sumup, tid, authorid from pre_up_tbl group by tid) as temp group by temp.authorid;
+
+select * from (select count(tid) as counttid, authorid as userid from pre_forum_post group by authorid) as tempa join (select sum(counttid) as sumup, temp.authorid from (select count(tid) as counttid, tid, authorid from pre_up_tbl group by tid) as temp group by temp.authorid) as tempb on tempa.userid = tempb.authorid;
+
+select * from (select count(tid) as counttid, authorid as userid from pre_forum_post group by authorid) as tempa inner join (select sum(counttid) as sumup, temp.authorid from (select count(tid) as counttid, tid, authorid from pre_up_tbl group by tid) as temp group by temp.authorid) as tempb on tempa.userid = tempb.authorid;
+
+select count(tid) as sumpost, authorid as uid from pre_forum_post group by authorid; 
+
+select a.sumpost, b.* from (select count(tid) as sumpost, authorid as uid from pre_forum_post group by authorid) AS a right join pre_user_tbl AS b ON a.uid = b.userid;
+
+select uptbl.sumup, posttbl.* from (select sum(sumup) as sumup, temp.authorid as userid from (select count(tid) as sumup, tid, authorid from pre_up_tbl group by tid) as temp group by temp.authorid) as uptbl right join (select a.sumpost, b.* from (select count(tid) as sumpost, authorid as uid from pre_forum_post group by authorid) AS a right join pre_user_tbl AS b ON a.uid = b.userid) as posttbl on uptbl.userid = posttbl.userid order by sumpost desc;
+
++-------+---------+----------+--------+------------------------------------------+--------------+----------+
+| sumup | sumpost | username | userid | userpic                                  | email        | password |
++-------+---------+----------+--------+------------------------------------------+--------------+----------+
+|     4 |      22 | 123      |     18 | /var/www/html/tanqin/data/user/18/18.jpg | 123@sina.com | 123456   |
+|     3 |       3 | 666      |     19 | /var/www/html/tanqin/data/user/19/19.jpg | 666@qq.com   | 666      |
+|     2 |      28 | Andy     |     20 | /var/www/html/tanqin/data/user/20/20.jpg | 12@qq.com    | 123456   |
+|  NULL |    NULL | guoliang |     21 | NULL                                     |              | guoliang |
++-------+---------+----------+--------+------------------------------------------+--------------+----------+
+
+select uptbl.sumup, posttbl.userid, posttbl.userpic, posttbl.username, posttbl.sumpost from (select sum(sumup) as sumup, temp.authorid as userid from (select count(tid) as sumup, tid, authorid from pre_up_tbl group by tid) as temp group by temp.authorid) as uptbl right join (select a.sumpost, b.* from (select count(tid) as sumpost, authorid as uid from pre_forum_post group by authorid) AS a right join pre_user_tbl AS b ON a.uid = b.userid) as posttbl on uptbl.userid = posttbl.userid order by sumpost desc;
+
++-------+--------+------------------------------------------+----------+---------+
+| sumup | userid | userpic                                  | username | sumpost |
++-------+--------+------------------------------------------+----------+---------+
+|     2 |     20 | /var/www/html/tanqin/data/user/20/20.jpg | Andy     |      28 |
+|     4 |     18 | /var/www/html/tanqin/data/user/18/18.jpg | 123      |      22 |
+|     3 |     19 | /var/www/html/tanqin/data/user/19/19.jpg | 666      |       3 |
+|  NULL |     21 | NULL                                     | guoliang |    NULL |
++-------+--------+------------------------------------------+----------+---------+
+interface 18##################################################
