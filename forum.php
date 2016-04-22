@@ -13,6 +13,7 @@ switch ($verb) {
         $fid = $_GET ["fid"];
         $frompage = $_GET ["from"];
         $topage = $_GET ["to"];
+        $uid = $_GET ["uid"];
         $link = mysql_connect ( 'localhost', 'root', 'welcome1' ) or die ( 'Could not connect: ' . mysql_error () );
         mysql_select_db ( 'tanqindb' ) or die ( 'Could not select database' );
         
@@ -23,11 +24,14 @@ switch ($verb) {
             }
             $offset = $topage - $frompage;
             
-            if ($fid == null) {
-                $query = "select tid, fid, authorid, author, message from pre_forum_post order by position desc LIMIT $frompage, $offset";
+            if (isset ( $fid )) {
+                $query = "select tid, fid, authorid, author, message, datetime from pre_forum_post where fid=$fid order by position desc LIMIT $frompage, $offset";
+            } elseif (isset ( $uid )) {
+                $query = "select tid, fid, authorid, author, message, datetime from pre_forum_post where authorid=$uid order by position desc LIMIT $frompage, $offset";
             } else {
-                $query = "select tid, fid, authorid, author, message from pre_forum_post where fid=$fid order by position desc LIMIT $frompage, $offset";
+                $query = "select tid, fid, authorid, author, message, datetime from pre_forum_post order by position desc LIMIT $frompage, $offset";
             }
+            
             $tinfo = mysql_query ( $query ) or die ( 'Query failed: ' . mysql_error () );
             
             $data = array ();
@@ -83,8 +87,10 @@ switch ($verb) {
                         "tid" => $row ['tid'],
                         "fid" => $row ['fid'],
                         "authorid" => $row ['authorid'],
+                        "authorpic" => get_userpic_from_uid ( $row ['authorid'] ),
                         "authorname" => $row ['author'],
                         "message" => $row ['message'],
+                        "datetime" => $row ['datetime'],
                         "comments" => $comments,
                         "up" => $up,
                         "videopath" => $videopath,
@@ -99,7 +105,7 @@ switch ($verb) {
                 $tindex ++;
             }
         } else {
-            $tinfoquery = "select tid, fid, authorid,author, message from pre_forum_post where tid = $tid";
+            $tinfoquery = "select tid, fid, authorid,author, message, datetime from pre_forum_post where tid = $tid";
             $attachmentquery = "select * from pre_attachments where tid = $tid";
             
             $tinfo = mysql_query ( $tinfoquery ) or die ( 'Query failed: ' . mysql_error () );
@@ -150,6 +156,7 @@ switch ($verb) {
                         "authorid" => $row ['authorid'],
                         "authorname" => $row ['author'],
                         "message" => $row ['message'],
+                        "datetime" => $row ['datetime'],
                         "comments" => $comments,
                         "up" => $up,
                         "videopath" => $videopath,
@@ -182,9 +189,14 @@ switch ($verb) {
             
             $insertcommentquery = "insert into pre_comments (tid, authorid, author, comment, replyauthor, replyauthorid) values ('$tid', '$userid','$username', '$comment', '$replyauthor','$replyauthorid')";
             $result = mysql_query ( $insertcommentquery ) or die ( 'Query failed: ' . mysql_error () );
+            
+            $commentidquery = "SELECT LAST_INSERT_ID()";
+            $result = mysql_query ( $commentidquery ) or die ( 'Query failed: ' . mysql_error () );
+            $rows = mysql_fetch_row ( $result );
             $data = array (
-                    'result' => "success" 
+                    'commentid' => $rows [0] 
             );
+            
             mysql_close ( $link );
         } elseif ($action == "newup") {
             // click up
@@ -222,9 +234,9 @@ switch ($verb) {
             // Connect to database
             $link = mysql_connect ( 'localhost', 'root', 'welcome1' ) or die ( 'Could not connect: ' . mysql_error () );
             mysql_select_db ( 'tanqindb' ) or die ( 'Could not select database' );
-            $tidquery = "select count(*) from pre_forum_post";
+            $tidquery = "select max(position) from pre_forum_post";
             $tidrow = mysql_fetch_array ( mysql_query ( $tidquery ) ) or die ( 'Query failed: ' . mysql_error () );
-            $tid = $tidrow [0];
+            $tid = $tidrow [0] + 1;
             
             $key = create_guid ();
             $attachmentdir = $storage . $key . "/";
@@ -284,7 +296,48 @@ switch ($verb) {
         }
         break;
     case 'DELETE' :
-        echo "processing delete\n";
+        $tid = $_GET ['tid'];
+        $userid = $_GET ['uid'];
+        $type = $_GET ['type'];
+        $commentid = $_GET ['commentid'];
+        
+        if (isset ( $type )) {
+            // Connect to database
+            $link = mysql_connect ( 'localhost', 'root', 'welcome1' ) or die ( 'Could not connect: ' . mysql_error () );
+            mysql_select_db ( 'tanqindb' ) or die ( 'Could not select database' );
+            
+            $deletecomments = "delete from pre_comments where authorid = '$userid' and commentid = $commentid";
+            $result = mysql_query ( $deletecomments ) or die ( 'Query failed: ' . mysql_error () );
+            
+            $data = array (
+                    'result' => $result 
+            );
+            
+            mysql_close ( $link );
+        } else {
+            // Connect to database
+            $link = mysql_connect ( 'localhost', 'root', 'welcome1' ) or die ( 'Could not connect: ' . mysql_error () );
+            mysql_select_db ( 'tanqindb' ) or die ( 'Could not select database' );
+            
+            $deletetid = "delete from pre_forum_post where authorid = '$userid' and tid = $tid";
+            $result = mysql_query ( $deletetid ) or die ( 'Query failed: ' . mysql_error () );
+            
+            $deletecomments = "delete from pre_comments where tid = $tid";
+            mysql_query ( $deletecomments ) or die ( 'Query failed: ' . mysql_error () );
+            
+            $deleteattachments = "delete from pre_attachments where tid = $tid";
+            mysql_query ( $deleteattachments ) or die ( 'Query failed: ' . mysql_error () );
+            
+            $deleteups = "delete from pre_up_tbl where tid = $tid";
+            mysql_query ( $deleteups ) or die ( 'Query failed: ' . mysql_error () );
+            
+            $data = array (
+                    'result' => $result 
+            );
+            
+            mysql_close ( $link );
+        }
+        break;
     default :
         throw new Exception ( 'Method Not Supported', 405 );
 }
@@ -294,7 +347,7 @@ header ( "Content-Type: application/json" );
 echo json_encode ( $data );
 
 /**
- * Éú³ÉÓÀÔ¶Î¨Ò»µÄ¼¤»îÂë
+ * ç”Ÿæˆæ°¸è¿œå”¯ä¸€çš„æ¿€æ´»ç 
  *
  * @return string
  *
@@ -304,12 +357,12 @@ function create_guid($namespace = null) {
     $uid = uniqid ( "", true );
     
     $data = $namespace;
-    $data .= $_SERVER ['REQUEST_TIME']; // ÇëÇóÄÇÒ»¿ÌµÄÊ±¼ä´Á
-    $data .= $_SERVER ['HTTP_USER_AGENT']; // »ñÈ¡·ÃÎÊÕßÔÚÓÃÊ²Ã´²Ù×÷ÏµÍ³
-    $data .= $_SERVER ['SERVER_ADDR']; // ·þÎñÆ÷IP
-    $data .= $_SERVER ['SERVER_PORT']; // ¶Ë¿ÚºÅ
-    $data .= $_SERVER ['REMOTE_ADDR']; // Ô¶³ÌIP
-    $data .= $_SERVER ['REMOTE_PORT']; // ¶Ë¿ÚÐÅÏ¢
+    $data .= $_SERVER ['REQUEST_TIME']; // è¯·æ±‚é‚£ä¸€åˆ»çš„æ—¶é—´æˆ³
+    $data .= $_SERVER ['HTTP_USER_AGENT']; // èŽ·å–è®¿é—®è€…åœ¨ç”¨ä»€ä¹ˆæ“ä½œç³»ç»Ÿ
+    $data .= $_SERVER ['SERVER_ADDR']; // æœåŠ¡å™¨IP
+    $data .= $_SERVER ['SERVER_PORT']; // ç«¯å£å·
+    $data .= $_SERVER ['REMOTE_ADDR']; // è¿œç¨‹IP
+    $data .= $_SERVER ['REMOTE_PORT']; // ç«¯å£ä¿¡æ¯
     
     $hash = strtoupper ( hash ( 'ripemd128', $uid . $guid . md5 ( $data ) ) );
     $guid = substr ( $hash, 0, 8 ) . '-' . substr ( $hash, 8, 4 ) . '-' . substr ( $hash, 12, 4 ) . '-' . substr ( $hash, 16, 4 ) . '-' . substr ( $hash, 20, 12 );
@@ -318,15 +371,15 @@ function create_guid($namespace = null) {
 }
 
 /**
- * ÁÐ³öÄ¿Â¼ÏÂµÄËùÓÐÎÄ¼þ
+ * åˆ—å‡ºç›®å½•ä¸‹çš„æ‰€æœ‰æ–‡ä»¶
  *
  * @param str $path
- *            Ä¿Â¼
+ *            ç›®å½•
  * @param str $exts
- *            ºó×º
+ *            åŽç¼€
  * @param array $list
- *            Â·¾¶Êý×é
- * @return array ·µ»ØÂ·¾¶Êý×é
+ *            è·¯å¾„æ•°ç»„
+ * @return array è¿”å›žè·¯å¾„æ•°ç»„
  *        
  */
 function dir_list($path, $exts = '', $list = array()) {
@@ -349,11 +402,11 @@ function dir_path($path) {
     return $path;
 }
 /**
- * ÓÉtidµÃµ½ËùÓÐµÄÕâ¸ötidµÄÆÀÂÛ
+ * ç”±tidå¾—åˆ°æ‰€æœ‰çš„è¿™ä¸ªtidçš„è¯„è®º
  *
  * @param str $tid
- *            Ìû×Óid
- * @return array ·µ»ØÆÀÂÛÊý×é
+ *            å¸–å­id
+ * @return array è¿”å›žè¯„è®ºæ•°ç»„
  *        
  */
 function get_comments_from_tid($tid) {
@@ -364,12 +417,21 @@ function get_comments_from_tid($tid) {
     $comments = array ();
     $index = 0;
     while ( $row = mysql_fetch_array ( $commentresult ) ) {
+        $authorid = $row ['authorid'];
+        $authorpic = get_userpic_from_uid ( $authorid );
+        $replyauthorid = $row ['replyauthorid'];
+        $replyauthorpic = get_userpic_from_uid ( $replyauthorid );
+        
         $array = array (
+                "commentid" => $row ['commentid'],
                 "authorname" => $row ['author'],
                 "authorid" => $row ['authorid'],
+                "authorpic" => $authorpic,
                 "message" => $row ['comment'],
+                "datetime" => $row ['datetime'],
                 "replyauthorname" => $row ['replyauthor'],
-                "replyauthorid" => $row ['replyauthorid'] 
+                "replyauthorid" => $row ['replyauthorid'],
+                "replyauthorpic" => $replyauthorpic 
         );
         $now = array (
                 $index => $array 
@@ -382,11 +444,11 @@ function get_comments_from_tid($tid) {
     return $comments;
 }
 /**
- * ÓÉtidµÃµ½ËùÓÐµÄÕâ¸ötidµÄµãÔÞ
+ * ç”±tidå¾—åˆ°æ‰€æœ‰çš„è¿™ä¸ªtidçš„ç‚¹èµž
  *
  * @param str $tid
- *            Ìû×Óid
- * @return array ·µ»ØµãÔÞÊý×é
+ *            å¸–å­id
+ * @return array è¿”å›žç‚¹èµžæ•°ç»„
  *        
  */
 function get_up_from_tid($tid) {
@@ -396,9 +458,13 @@ function get_up_from_tid($tid) {
     $up = array ();
     $index = 0;
     while ( $row = mysql_fetch_array ( $upresult ) ) {
+        $authorid = $row ['authorid'];
+        $authorpic = get_userpic_from_uid ( $authorid );
+        
         $array = array (
                 "authorname" => $row ['author'],
-                "authorid" => $row ['authorid'] 
+                "authorid" => $row ['authorid'],
+                "authorpic" => $authorpic 
         );
         $now = array (
                 $index => $array 
@@ -408,6 +474,27 @@ function get_up_from_tid($tid) {
     }
     
     return $up;
+}
+
+/**
+ * ç”±uidå¾—åˆ°æ‰€æœ‰çš„ç”¨æˆ·å¤´åƒçš„è·¯å¾„
+ *
+ * @param str $uid
+ *            ç”¨æˆ·id
+ * @return str ç”¨æˆ·å¤´åƒè·¯å¾„
+ *        
+ */
+function get_userpic_from_uid($uid) {
+    $query = "select userpic from pre_user_tbl where userid = $uid";
+    $result = mysql_query ( $query ) or die ( 'Query failed: ' . mysql_error () );
+    $positivepath = "/var/www/html/tanqin";
+    $rows = mysql_fetch_array ( $result );
+    $userpic = $rows [0];
+    if (! isset ( $userpic )) {
+        return "";
+    }
+    $result = substr ( $userpic, strlen ( $positivepath ) );
+    return $result;
 }
 
 ?>
