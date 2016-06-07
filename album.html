@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+        href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet"
+        href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <section>
+        <div class="jumbotron">
+            <div class="container">
+                <h1>所有专辑</h1>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="container">
+            <div class="tabbable">
+                <!-- Only required for left/right tabs -->
+                <ul class="nav nav-tabs">
+                    <li id="l1" class="active"><a href="#tab1" data-toggle="tab">课堂</a></li>
+                    <li id="l2"><a href="#tab2" data-toggle="tab">赏析</a></li>
+                </ul>
+            </div>
+
+        <div class="container paddingTop" id="tablediv">
+            <table id="table" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>专辑名称</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+<script>
+var typename;
+if ($("#l1").hasClass("active")) {
+        typename = "教学";
+} else {
+        typename = "赏析";
+}
+$(document).ready(function(){
+    $.get("album.php",
+    {
+        type: typename
+    },
+    function(data,status){
+      alert("Data: " + data + "\nStatus: " + status);
+    });
+});
+</script>
+
+</body>
+
+</html>
