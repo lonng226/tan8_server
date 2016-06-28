@@ -21,28 +21,56 @@
             </div>
         </div>
     </section>
-    <section>
-        <div class="container">
-            <div class="tabbable">
-                <!-- Only required for left/right tabs -->
-                <ul class="nav nav-tabs">
-                    <li class="active"><a href="#tab1" data-toggle="tab">课堂</a></li>
-                    <li><a href="#tab2" data-toggle="tab">赏析</a></li>
-                </ul>
-            </div>
-            
+    <section>            
         <div class="container paddingTop" id="tablediv">
             <table id="table" class="table table-striped">
                 <thead>
                     <tr>
+                        <th>专辑类别</th>
                         <th>专辑名称</th>
-                        <th>歌曲名称</th>
+                        <th>操作</th>
                     </tr>
                 </thead>
                 <tbody>
                 </tbody>
             </table>
         </div>
+        
+        <script>
+        $(document).ready(function(){
+            var teach = "http://120.24.16.24/tanqin/album.php?type=教学";
+            var enjoy = "http://120.24.16.24/tanqin/album.php?type=赏析";
+            var tr_index = 1;
+            $("tbody").empty();
+            $.get(teach, function(albums,status){
+                albums.forEach(function(album) {
+                var tr_start = "<tr id=\"tr_" + tr_index + "\">";
+                var tr_id = "#tr_" + tr_index;
+                var td_type = "<td>" + "教学" + "</td>";
+                var td_name = "<td>" + album.name + "</td>";
+                $("tbody").append(tr_start);
+                $(tr_id).append(td_type);
+                $(tr_id).append(td_name);
+                $("tbody").append("</tr>");
+                tr_index++;
+                })
+            });
+                        
+            $.get(enjoy, function(albums,status){
+            albums.forEach(function(album) {
+                var tr_start = "<tr id=\"tr_" + tr_index + "\">";
+                var tr_id = "#tr_" + tr_index;
+                var td_type = "<td>" + "赏析" + "</td>";
+                var td_name = "<td>" + album.name + "</td>";
+                $("tbody").append(tr_start);
+                $(tr_id).append(td_type);
+                $(tr_id).append(td_name);
+                $("tbody").append("</tr>");
+                tr_index++;
+                })
+            });
+        });        
+        </script>
             
 </body>
 
