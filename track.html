@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+	href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet"
+	href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<section>
+		<div class="jumbotron">
+			<div class="container">
+				<h1></h1>
+			</div>
+		</div>
+	</section>
+	<section>
+		<div class="container paddingTop" id="tablediv">
+			<table id="table" class="table table-striped">
+				<thead>
+					<tr>
+						<th>歌曲名称</th>
+						<th>专辑类别</th>
+						<th>专辑名称</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+
+		<script>
+            (function($) {
+                $.getUrlParam = function(name) {
+                    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                    var r = window.location.search.substr(1).match(reg);
+                    if (r != null)
+                        return unescape(r[2]);
+                    return null;
+                }
+            })(jQuery);
+
+            var albumid = $.getUrlParam('albumid');
+            var tracklist;
+
+            $(document)
+                    .ready(
+                            function() {
+                                var teach = "http://120.24.16.24/tanqin/album.php?albumid="
+                                        + albumid;
+                                var btn_group = "<td><div class=\"btn-group btn-group-sm\"><button type=\"button\" class=\"btn btn-default\">打开</button><button type=\"button\" class=\"btn btn-default\">下载</button><button type=\"button\" class=\"btn btn-default\">编辑</button><button type=\"button\" class=\"btn btn-default\">删除</button></div></td>";
+                                $("tbody").empty();
+                                $
+                                        .get(
+                                                teach,
+                                                function(tracks, status) {
+                                                    tracklist = tracks;
+                                                    tracks
+                                                            .forEach(function(
+                                                                    track) {
+                                                                var tr_start = "<tr id=\"tr_" + track.id + "\">";
+                                                                var tr_id = "#tr_"
+                                                                        + track.id;
+                                                                var td_name = "<td>"
+                                                                        + track.name
+                                                                        + "</td>";
+                                                                var td_type = "<td>"
+                                                                        + track.type
+                                                                        + "</td>";
+                                                                var td_album = "<td>"
+                                                                        + track.albumname
+                                                                        + "</td>";
+                                                                if ($("h1")
+                                                                        .html() == "") {
+                                                                    $("h1")
+                                                                            .html(
+                                                                                    track.albumname)
+                                                                }
+
+                                                                $("tbody")
+                                                                        .append(
+                                                                                tr_start);
+                                                                $(tr_id)
+                                                                        .append(
+                                                                                td_name);
+                                                                $(tr_id)
+                                                                        .append(
+                                                                                td_type);
+                                                                $(tr_id)
+                                                                        .append(
+                                                                                td_album);
+                                                                $(tr_id)
+                                                                        .append(
+                                                                                generate_btn_group(track.id));
+                                                                $("tbody")
+                                                                        .append(
+                                                                                "</tr>");
+                                                            })
+                                                });
+                            });
+
+            function generate_btn_group(id, trackurl) {
+                var btn_group = "<td><div class=\"btn-group btn-group-sm\"><button onclick=\"opentrack("
+                        + id
+                        + ")\" type=\"button\" class=\"btn btn-default\">打开</button><button onclick=\"deletetrack("
+                        + id
+                        + ")\" type=\"button\" class=\"btn btn-default\">删除</button></div></td>";
+                return btn_group;
+            }
+
+            function opentrack(id) {
+                tracklist.forEach(function(track) {
+                    if (track.id == id) {
+                        var trackurl = "http://120.24.16.24/tanqin/uploads/"
+                                + encodeURI(track.type) + "/" + encodeURI(track.albumname) + "/"
+                                + encodeURI(track.name);
+                        window.location.href = trackurl;
+                    }
+                })
+            }
+            
+            function deletetrack(id) {
+                $.get(
+                        "http://120.24.16.24/tanqin/album.php?method=delete&trackid="
+                                + id, function(data, status) {
+                            window.location.reload();
+                        });
+            }
+        </script>
+</body>
+</html>

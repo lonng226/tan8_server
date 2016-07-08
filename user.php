@@ -295,15 +295,15 @@ header ( "Content-Type: application/json" );
 echo json_encode ( $data );
 
 /**
- * åˆ—å‡ºç›®å½•ä¸‹çš„æ‰€æœ‰æ–‡ä»¶
+ * ÁÐ³öÄ¿Â¼ÏÂµÄËùÓÐÎÄ¼þ
  *
  * @param str $path
- *            ç›®å½•
+ *            Ä¿Â¼
  * @param str $exts
- *            åŽç¼€
+ *            ºó×º
  * @param array $list
- *            è·¯å¾„æ•°ç»„
- * @return array è¿”å›žè·¯å¾„æ•°ç»„
+ *            Â·¾¶Êý×é
+ * @return array ·µ»ØÂ·¾¶Êý×é
  *        
  */
 function dir_list($path, $exts = '', $list = array()) {
@@ -325,13 +325,12 @@ function dir_path($path) {
         $path = $path . '/';
     return $path;
 }
-
 /**
- * ç”±uidå¾—åˆ°ç”¨æˆ·ä¿¡æ¯å¤´åƒè·¯å¾„å’Œusername
+ * ÓÉuidµÃµ½ÓÃ»§ÐÅÏ¢Í·ÏñÂ·¾¶ºÍusername
  *
  * @param str $uid
- *            ç”¨æˆ·id
- * @return array å¤´åƒè·¯å¾„å’Œusername
+ *            ÓÃ»§id
+ * @return array Í·ÏñÂ·¾¶ºÍusername
  *        
  */
 function get_userinfo_from_uid($uid) {
@@ -363,13 +362,12 @@ function process_userpic($userpic) {
         return $userpic;
     }
 }
-
 /**
- * ç”±uidå¾—åˆ°ç”¨æˆ·å‘å¸–æ€»æ•°
+ * ÓÉuidµÃµ½ÓÃ»§·¢Ìû×ÜÊý
  *
  * @param str $uid
- *            ç”¨æˆ·id
- * @return å‘å¸–æ€»æ•°
+ *            ÓÃ»§id
+ * @return ·¢Ìû×ÜÊý
  *
  */
 function get_sumpost_from_uid($uid) {
@@ -380,13 +378,12 @@ function get_sumpost_from_uid($uid) {
     
     return $rows [0];
 }
-
 /**
- * ç”±uidå¾—åˆ°ç”¨æˆ·ç²‰ä¸æ•°
+ * ÓÉuidµÃµ½ÓÃ»§·ÛË¿Êý
  *
  * @param str $uid
- *            ç”¨æˆ·id
- * @return ç²‰ä¸æ•°
+ *            ÓÃ»§id
+ * @return ·ÛË¿Êý
  *
  */
 function get_sumfollowers_from_uid($uid) {
@@ -397,13 +394,12 @@ function get_sumfollowers_from_uid($uid) {
     
     return $rows [0];
 }
-
 /**
- * ç”±uidå¾—åˆ°ç”¨æˆ·å…³æ³¨æ•°
+ * ÓÉuidµÃµ½ÓÃ»§¹Ø×¢Êý
  *
  * @param str $uid
- *            ç”¨æˆ·id
- * @return å…³æ³¨æ•°
+ *            ÓÃ»§id
+ * @return ¹Ø×¢Êý
  *
  */
 function get_sumattentions_from_uid($uid) {
@@ -414,6 +410,4 @@ function get_sumattentions_from_uid($uid) {
     
     return $rows [0];
 }
-
 ?>
-

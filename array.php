@@ -12,7 +12,6 @@ $test = array (
 $videopattern = '/video/';
 $previewpattern = '/videopreview/';
 
-
 // insert into pre_comments (tid, author, authorid, comment, replyauthor, replyauthorid) values (1, "guoliang", 123456, "looks good to me", "wgl", 321);
 $link = mysql_connect ( 'localhost', 'root', 'welcome1' ) or die ( 'Could not connect: ' . mysql_error () );
 mysql_select_db ( 'tanqindb' ) or die ( 'Could not select database' );
@@ -51,8 +50,6 @@ $comments = array (
 
 header ( "Content-Type: application/json" );
 echo json_encode ( $comments );
-
-
 function dir_path($path) {
     $path = str_replace ( '\\', '/', $path );
     if (substr ( $path, - 1 ) != '/')
@@ -85,5 +82,5 @@ function dir_list($path, $exts = '', $list = array()) {
     return $list;
 }
 $path = "/var/www/html/tanqin/data/attachments/DCFA97BE-ECA9-8013-309A-A9CA5260553C";
-echo dir_list($path);
+echo dir_list ( $path );
 ?>

@@ -35,43 +35,54 @@
                 </tbody>
             </table>
         </div>
-        
         <script>
-        $(document).ready(function(){
+        $(document).ready(function () {
             var teach = "http://120.24.16.24/tanqin/album.php?type=教学";
             var enjoy = "http://120.24.16.24/tanqin/album.php?type=赏析";
-            var tr_index = 1;
+            var baseurl = "http://120.24.16.24/tanqin/uploads/";
             $("tbody").empty();
-            $.get(teach, function(albums,status){
-                albums.forEach(function(album) {
-                var tr_start = "<tr id=\"tr_" + tr_index + "\">";
-                var tr_id = "#tr_" + tr_index;
-                var td_type = "<td>" + "教学" + "</td>";
-                var td_name = "<td>" + album.name + "</td>";
-                $("tbody").append(tr_start);
-                $(tr_id).append(td_type);
-                $(tr_id).append(td_name);
-                $("tbody").append("</tr>");
-                tr_index++;
+            $.get(teach, function (albums, status) {
+                albums.forEach(function (album) {
+                    var tr_start = "<tr id=\"tr_" + album.id + "\">";
+                    var tr_id = "#tr_" + album.id;
+                    var td_type = "<td>" + "教学" + "</td>";
+                    var td_name = "<td>" + album.name + "</td>";
+                    $("tbody").append(tr_start);
+                    $(tr_id).append(td_type);
+                    $(tr_id).append(td_name);
+                    $(tr_id).append(generate_btn_group(album.id));
+                    $("tbody").append("</tr>");
                 })
             });
-                        
-            $.get(enjoy, function(albums,status){
-            albums.forEach(function(album) {
-                var tr_start = "<tr id=\"tr_" + tr_index + "\">";
-                var tr_id = "#tr_" + tr_index;
-                var td_type = "<td>" + "赏析" + "</td>";
-                var td_name = "<td>" + album.name + "</td>";
-                $("tbody").append(tr_start);
-                $(tr_id).append(td_type);
-                $(tr_id).append(td_name);
-                $("tbody").append("</tr>");
-                tr_index++;
+
+            $.get(enjoy, function (albums, status) {
+                albums.forEach(function (album) {
+                    var tr_start = "<tr id=\"tr_" + album.id + "\">";
+                    var tr_id = "#tr_" + album.id;
+                    var td_type = "<td>" + "赏析" + "</td>";
+                    var td_name = "<td>" + album.name + "</td>";
+                    $("tbody").append(tr_start);
+                    $(tr_id).append(td_type);
+                    $(tr_id).append(td_name);
+                    $(tr_id).append(generate_btn_group(album.id));
+                    $("tbody").append("</tr>");
                 })
             });
-        });        
+        });
+
+        function generate_btn_group(id) {
+            var btn_group = "<td><div class=\"btn-group btn-group-sm\"><button onclick=\"openalbum(" + id + ")\" type=\"button\" class=\"btn btn-default\">打开</button><button type=\"button\" class=\"btn btn-default\">下载</button><button onclick=\"editalbum(" + id + ")\"type=\"button\" class=\"btn btn-default\">编辑</button><button type=\"button\" class=\"btn btn-default\">删除</button></div></td>";
+		    return btn_group;
+        }
+
+        function openalbum(id) {
+            window.location.href = 'http://120.24.16.24/tanqin/track.html?albumid=' + id;
+        }
+		
+		function editalbum(id) {
+            window.location.href = 'http://120.24.16.24/tanqin/album.html?albumid=' + id;
+        }
         </script>
             
 </body>
-
 </html>

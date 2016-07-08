@@ -357,12 +357,12 @@ function create_guid($namespace = null) {
     $uid = uniqid ( "", true );
     
     $data = $namespace;
-    $data .= $_SERVER ['REQUEST_TIME']; // 请求那一刻的时间戳
-    $data .= $_SERVER ['HTTP_USER_AGENT']; // 获取访问者在用什么操作系统
-    $data .= $_SERVER ['SERVER_ADDR']; // 服务器IP
-    $data .= $_SERVER ['SERVER_PORT']; // 端口号
-    $data .= $_SERVER ['REMOTE_ADDR']; // 远程IP
-    $data .= $_SERVER ['REMOTE_PORT']; // 端口信息
+    $data .= $_SERVER ['REQUEST_TIME']; // 璇锋眰閭ｄ竴鍒荤殑鏃堕棿鎴�
+    $data .= $_SERVER ['HTTP_USER_AGENT']; // 鑾峰彇璁块棶鑰呭湪鐢ㄤ粈涔堟搷浣滅郴缁�
+    $data .= $_SERVER ['SERVER_ADDR']; // 鏈嶅姟鍣↖P
+    $data .= $_SERVER ['SERVER_PORT']; // 绔彛鍙�
+    $data .= $_SERVER ['REMOTE_ADDR']; // 杩滅▼IP
+    $data .= $_SERVER ['REMOTE_PORT']; // 绔彛淇℃伅
     
     $hash = strtoupper ( hash ( 'ripemd128', $uid . $guid . md5 ( $data ) ) );
     $guid = substr ( $hash, 0, 8 ) . '-' . substr ( $hash, 8, 4 ) . '-' . substr ( $hash, 12, 4 ) . '-' . substr ( $hash, 16, 4 ) . '-' . substr ( $hash, 20, 12 );
@@ -475,7 +475,6 @@ function get_up_from_tid($tid) {
     
     return $up;
 }
-
 /**
  * 由uid得到所有的用户头像的路径
  *
@@ -496,6 +495,4 @@ function get_userpic_from_uid($uid) {
     $result = substr ( $userpic, strlen ( $positivepath ) );
     return $result;
 }
-
 ?>
-

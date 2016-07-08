@@ -5,254 +5,263 @@
 
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
-        href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 
 <!-- Optional theme -->
 <link rel="stylesheet"
-        href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+	href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 
 <script src="js/build/build.js"></script>
 <script>
-        var Dropzone = require("enyo-dropzone");
-        Dropzone.autoDiscover = false;
+    var Dropzone = require("enyo-dropzone");
+    Dropzone.autoDiscover = false;
 </script>
 
 <style>
 html, body {
-        height: 100%;
+	height: 100%;
 }
 
 #actions {
-        margin: 2em 0;
+	margin: 2em 0;
 }
 
 /* Mimic table appearance */
 div.table {
-        display: table;
+	display: table;
 }
 
 div.table .file-row {
-        display: table-row;
+	display: table-row;
 }
 
 div.table .file-row>div {
-        display: table-cell;
-        vertical-align: top;
-        border-top: 1px solid #ddd;
-        padding: 8px;
+	display: table-cell;
+	vertical-align: top;
+	border-top: 1px solid #ddd;
+	padding: 8px;
 }
 
 div.table .file-row:nth-child(odd) {
-        background: #f9f9f9;
+	background: #f9f9f9;
 }
 /* The total progress gets shown by event listeners */
 #total-progress {
-        opacity: 0;
-        transition: opacity 0.3s linear;
+	opacity: 0;
+	transition: opacity 0.3s linear;
 }
 
 /* Hide the progress bar when finished */
 #previews .file-row.dz-success .progress {
-        opacity: 0;
-        transition: opacity 0.3s linear;
+	opacity: 0;
+	transition: opacity 0.3s linear;
 }
 
 /* Hide the delete button initially */
 #previews .file-row .delete {
-        display: none;
+	display: none;
 }
 
 /* Hide the start and cancel buttons and show the delete button */
 #previews .file-row.dz-success .start, #previews .file-row.dz-success .cancel
-        {   
-        display: none;
+	{
+	display: none;
 }
 
 #previews .file-row.dz-success .delete {
-        display: block;
+	display: block;
 }
 </style>
 
 </head>
 <body>
 
-        <div class="container" id="container">
-                <h1>专辑上传</h1>
-                <h2 class="lead">试用页面</h2>
+	<div class="container" id="container">
+		<h1>专辑上传</h1>
+		<h2 class="lead">注意事项：上传文件大小不能超过40M！</h2>
 
-                <ul class="nav nav-tabs">
-                        <li class="active"><a href="#">请点击新建专辑</a></li>
-                </ul>
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#">请点击新建专辑</a></li>
+		</ul>
 
-                <br>
-                <button id="new_btn" type="button" class="btn btn-success"> <i class="glyphicon glyphicon-plus"></i> <span>新建专辑</span></button>
-                <br>
-                <div id="inputs" class="row" style="display: none;">
-                    <div class="col-lg-12">
-                        <ul id="myTab" class="nav nav-tabs">
-                            <li id="l1" class="active"><a href="#teach" data-toggle="tab">教学</a></li>
-                            <li id="l2"><a href="#enjoy" data-toggle="tab">赏析</a></li>
-                        </ul>
-                    </div>
-                    <div id="myTabContent" class="tab-content col-lg-12">
-                       <div class="tab-pane fade in active" id="teach">
-                            <form role="form">
-                                   <div class="form-group">
-                                        <label for="name">名称</label>
-                                        <input id="teachname" type="text" class="form-control" id="name" 
-                                                        placeholder="请输入名称">
-                                   </div>
-                            </form>
-                       </div>
-                       <div class="tab-pane fade" id="enjoy">
-                            <form role="form">
-                                <div class="form-group">
-                                     <label for="name">名称</label>
-                                     <input id="enjoyname" type="text" class="form-control" id="name" 
-                                                                placeholder="请输入名称">
-                                </div>
-                            </form>
-                       </div>
-                    </div>       
-                </div>       
-                <br>
-                <div id="actions" class="row">
-
-                        <div class="col-lg-7">
-                                <!-- The fileinput-button span is used to style the file input field as button -->
-                                <span class="btn btn-success fileinput-button"> <i
-                                        class="glyphicon glyphicon-plus"></i> <span>Add files...</span>
-                                </span>
-                                <button type="submit" class="btn btn-primary start">
-                                        <i class="glyphicon glyphicon-upload"></i> <span>Start
-                                                upload</span>
-                                </button>
-                                <button type="reset" class="btn btn-warning cancel">
-                                        <i class="glyphicon glyphicon-ban-circle"></i> <span>Cancel
-                                                upload</span>
-                                </button>
+		<br>
+		<button id="new_btn" type="button" class="btn btn-success">
+			<i class="glyphicon glyphicon-plus"></i> <span>新建专辑</span>
+		</button>
+		<br>
+		<div id="inputs" class="row" style="display: none;">
+			<div class="col-lg-12">
+				<ul id="myTab" class="nav nav-tabs">
+					<li id="l1" class="active"><a href="#teach" data-toggle="tab">教学</a></li>
+					<li id="l2"><a href="#enjoy" data-toggle="tab">赏析</a></li>
+					<li id="l3"><a href="#track" data-toggle="tab">曲谱</a></li>
+				</ul>
+			</div>
+			<div id="myTabContent" class="tab-content col-lg-12">
+				<div class="tab-pane fade in active" id="teach">
+					<form role="form">
+						<div class="form-group">
+							<label for="name">名称</label> <input id="teachname" type="text"
+								class="form-control" id="name" placeholder="请输入名称">
+						</div>
+					</form>
+				</div>
+				<div class="tab-pane fade" id="enjoy">
+					<form role="form">
+						<div class="form-group">
+							<label for="name">名称</label> <input id="enjoyname" type="text"
+								class="form-control" id="name" placeholder="请输入名称">
+						</div>
+					</form>
+				</div>
+				<div class="tab-pane fade" id="track">
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="name">名称</label> <input id="trackname" type="text"
+                                class="form-control" id="name" placeholder="请输入名称">
                         </div>
+                    </form>
+                </div>				
+			</div>
+		</div>
+		<br>
+		<div id="actions" class="row">
 
-                        <div class="col-lg-5">
-                                <!-- The global file processing state -->
-                                <span class="fileupload-process">
-                                        <div id="total-progress" class="progress progress-striped active"
-                                                role="progressbar" aria-valuemin="0" aria-valuemax="100"
-                                                aria-valuenow="0">
-                                                <div class="progress-bar progress-bar-success" style="width: 0%;"
-                                                        data-dz-uploadprogress></div>
-                                        </div>
-                                </span>
-                        </div>
+			<div class="col-lg-7">
+				<!-- The fileinput-button span is used to style the file input field as button -->
+				<span class="btn btn-success fileinput-button"> <i
+					class="glyphicon glyphicon-plus"></i> <span>Add files...</span>
+				</span>
+				<button type="submit" class="btn btn-primary start">
+					<i class="glyphicon glyphicon-upload"></i> <span>Start
+						upload</span>
+				</button>
+				<button type="reset" class="btn btn-warning cancel">
+					<i class="glyphicon glyphicon-ban-circle"></i> <span>Cancel
+						upload</span>
+				</button>
+			</div>
 
-                </div>
+			<div class="col-lg-5">
+				<!-- The global file processing state -->
+				<span class="fileupload-process">
+					<div id="total-progress" class="progress progress-striped active"
+						role="progressbar" aria-valuemin="0" aria-valuemax="100"
+						aria-valuenow="0">
+						<div class="progress-bar progress-bar-success" style="width: 0%;"
+							data-dz-uploadprogress></div>
+					</div>
+				</span>
+			</div>
 
-                <div class="table table-striped files" id="previews">
+		</div>
 
-                        <div id="template" class="file-row">
-                                <!-- This is used as the file preview template -->
-                                <div>
-                                        <span class="preview"><img data-dz-thumbnail /></span>
-                                </div>
-                                <div>
-                                        <p class="name" data-dz-name></p>
-                                        <strong class="error text-danger" data-dz-errormessage></strong>
-                                </div>
-                                <div>
-                                        <p class="size" data-dz-size></p>
-                                        <div class="progress progress-striped active" role="progressbar"
-                                                aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                                                <div class="progress-bar progress-bar-success" style="width: 0%;"
-                                                        data-dz-uploadprogress></div>
-                                        </div>
-                                </div>
-                                <div>
-                                        <button class="btn btn-primary start">
-                                                <i class="glyphicon glyphicon-upload"></i> <span>Start</span>
-                                        </button>
-                                        <button data-dz-remove class="btn btn-warning cancel">
-                                                <i class="glyphicon glyphicon-ban-circle"></i> <span>Cancel</span>
-                                        </button>
-                                        <button data-dz-remove class="btn btn-danger delete">
-                                                <i class="glyphicon glyphicon-trash"></i> <span>Delete</span>
-                                        </button>
-                                </div>
-                        </div>
+		<div class="table table-striped files" id="previews">
 
-                </div>
-                <script>
-                     // Button operation
-                     $(document).ready(function(){
-                         $("#new_btn").click(function(){
-                        	 $("#inputs").show();
-                         });
-                     });                   
-                </script>
-                <script>
-                        // Get the template HTML and remove it from the doument
-                        var previewNode = document.querySelector("#template");
-                        previewNode.id = "";
-                        var previewTemplate = previewNode.parentNode.innerHTML;
-                        previewNode.parentNode.removeChild(previewNode);
+			<div id="template" class="file-row">
+				<!-- This is used as the file preview template -->
+				<div>
+					<span class="preview"><img data-dz-thumbnail /></span>
+				</div>
+				<div>
+					<p class="name" data-dz-name></p>
+					<strong class="error text-danger" data-dz-errormessage></strong>
+				</div>
+				<div>
+					<p class="size" data-dz-size></p>
+					<div class="progress progress-striped active" role="progressbar"
+						aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+						<div class="progress-bar progress-bar-success" style="width: 0%;"
+							data-dz-uploadprogress></div>
+					</div>
+				</div>
+				<div>
+					<button class="btn btn-primary start">
+						<i class="glyphicon glyphicon-upload"></i> <span>Start</span>
+					</button>
+					<button data-dz-remove class="btn btn-warning cancel">
+						<i class="glyphicon glyphicon-ban-circle"></i> <span>Cancel</span>
+					</button>
+					<button data-dz-remove class="btn btn-danger delete">
+						<i class="glyphicon glyphicon-trash"></i> <span>Delete</span>
+					</button>
+				</div>
+			</div>
 
-                        var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
-                                url : "http://120.24.16.24/tanqin/upload.php", // Set the url
-                                thumbnailWidth : 80,
-                                thumbnailHeight : 80,
-                                parallelUploads : 20,
-                                previewTemplate : previewTemplate,
-                                autoQueue : false, // Make sure the files aren't queued until manually added
-                                previewsContainer : "#previews", // Define the container to display the previews
-                                clickable : ".fileinput-button" // Define the element that should be used as click trigger to select files.
-                        });
+		</div>
+		<script>
+            // Button operation
+            $(document).ready(function() {
+                $("#new_btn").click(function() {
+                    $("#inputs").show();
+                });
+            });
+        </script>
+		<script>
+            // Get the template HTML and remove it from the doument
+            var previewNode = document.querySelector("#template");
+            previewNode.id = "";
+            var previewTemplate = previewNode.parentNode.innerHTML;
+            previewNode.parentNode.removeChild(previewNode);
 
-                        myDropzone
-                                        .on(
-                                                        "addedfile",
-                                                        function(file) {
-                                                                // Hookup the start button
-                                                                file.previewElement.querySelector(".start").onclick = function() {
-                                                                        myDropzone.enqueueFile(file);
-                                                                };
-                                                        });
+            var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
+                url : "http://120.24.16.24/tanqin/upload.php", // Set the url
+                thumbnailWidth : 80,
+                thumbnailHeight : 80,
+                parallelUploads : 20,
+                previewTemplate : previewTemplate,
+                autoQueue : false, // Make sure the files aren't queued until manually added
+                previewsContainer : "#previews", // Define the container to display the previews
+                clickable : ".fileinput-button" // Define the element that should be used as click trigger to select files.
+            });
 
-                        // Update the total progress bar
-                        myDropzone
-                                        .on(
-                                                        "totaluploadprogress",
-                                                        function(progress) {
-                                                                document
-                                                                                .querySelector("#total-progress .progress-bar").style.width = progress
-                                                                                + "%";
-                                                        });
-                        
-                        myDropzone.on("sending", function(file) {
-                                // Show the total progress bar when upload starts
-                                document.querySelector("#total-progress").style.opacity = "1";
-                                // And disable the start button
-                                file.previewElement.querySelector(".start").setAttribute(
-                                                "disabled", "disabled");
-                        });
+            myDropzone
+                    .on(
+                            "addedfile",
+                            function(file) {
+                                // Hookup the start button
+                                file.previewElement.querySelector(".start").onclick = function() {
+                                    myDropzone.enqueueFile(file);
+                                };
+                            });
 
-                        // Hide the total progress bar when nothing's uploading anymore
-                        myDropzone.on("queuecomplete", function(progress) {
-                                document.querySelector("#total-progress").style.opacity = "0";
-                        });
+            // Update the total progress bar
+            myDropzone
+                    .on(
+                            "totaluploadprogress",
+                            function(progress) {
+                                document
+                                        .querySelector("#total-progress .progress-bar").style.width = progress
+                                        + "%";
+                            });
 
-                        // Setup the buttons for all transfers
-                        // The "add files" button doesn't need to be setup because the config
-                        // `clickable` has already been specified.
-                        document.querySelector("#actions .start").onclick = function() {
-                                myDropzone.enqueueFiles(myDropzone
-                                                .getFilesWithStatus(Dropzone.ADDED));
-                        };
-                        document.querySelector("#actions .cancel").onclick = function() {
-                                myDropzone.removeAllFiles(true);
-                        };
-                </script>
-        </div>
+            myDropzone.on("sending", function(file) {
+                // Show the total progress bar when upload starts
+                document.querySelector("#total-progress").style.opacity = "1";
+                // And disable the start button
+                file.previewElement.querySelector(".start").setAttribute(
+                        "disabled", "disabled");
+            });
+
+            // Hide the total progress bar when nothing's uploading anymore
+            myDropzone.on("queuecomplete", function(progress) {
+                document.querySelector("#total-progress").style.opacity = "0";
+            });
+
+            // Setup the buttons for all transfers
+            // The "add files" button doesn't need to be setup because the config
+            // `clickable` has already been specified.
+            document.querySelector("#actions .start").onclick = function() {
+                myDropzone.enqueueFiles(myDropzone
+                        .getFilesWithStatus(Dropzone.ADDED));
+            };
+            document.querySelector("#actions .cancel").onclick = function() {
+                myDropzone.removeAllFiles(true);
+            };
+        </script>
+	</div>
 </body>
 
 </html>

@@ -1557,6 +1557,9 @@ require.register("enyo-dropzone/lib/dropzone.js", function(exports, require, mod
     	if ($("#l1").hasClass("active")) {
     		path = "教学";
     		name = $("#teachname").val();
+    	} else if ($("#l3").hasClass("active")){
+    	    path = "曲谱";
+    	    name = $("#trackname").val();
     	} else {
     		path = "赏析";
     		name = $("#enjoyname").val();
