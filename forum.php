@@ -263,6 +263,7 @@ switch ($verb) {
                     mkdir ( $attachmentdir . "video/" );
                     move_uploaded_file ( $video ["tmp_name"], $attachmentdir . "video/" . $video ["name"] );
                 }
+                compressfile ( $attachmentdir . "video/" . $video ["name"] );
             }
             
             if (isset ( $videopreviewimage )) {
@@ -494,5 +495,18 @@ function get_userpic_from_uid($uid) {
     }
     $result = substr ( $userpic, strlen ( $positivepath ) );
     return $result;
+}
+/**
+ * Compress file.
+ *
+ * @param
+ *            file targetfile
+ */
+function compressfile($targetfile) {
+    $targetfileorg = $targetfile . "." . "org";
+    copy ( $targetfile, $targetfileorg );
+    $compresscmd = "/home/guoliawa/ffmpeg/ffmpeg -y -i " . $targetfileorg . " -b:v 400k -r 15 -movflags faststart " . $targetfile;
+    shell_exec ( $compresscmd );
+    unlink ( $targetfileorg );
 }
 ?>

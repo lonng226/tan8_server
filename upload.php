@@ -94,7 +94,7 @@ function write_melody_to_db($type, $path, $filename) {
 function compressfile($targetfile) {
     $targetfileorg = $targetfile . "." . "org";
     copy ( $targetfile, $targetfileorg );
-    $compresscmd = "/home/guoliawa/ffmpeg/ffmpeg -y -i " . $targetfileorg . " -b:v 400k -s 1280x720 -r 15 -movflags faststart " . $targetfile;
+    $compresscmd = "/home/guoliawa/ffmpeg/ffmpeg -y -i " . $targetfileorg . " -b:v 400k -r 15 -movflags faststart " . $targetfile;
     shell_exec ( $compresscmd );
     unlink ( $targetfileorg );
 }
