@@ -80,7 +80,7 @@ div.table .file-row:nth-child(odd) {
 
 	<div class="container" id="container">
 		<h1>专辑上传</h1>
-		<h2 class="lead">注意事项：上传文件大小不能超过40M！</h2>
+		<h2 class="lead">注意事项：上传文件大小不能超过200M！</h2>
 
 		<ul class="nav nav-tabs">
 			<li class="active"><a href="#">请点击新建专辑</a></li>
@@ -104,7 +104,8 @@ div.table .file-row:nth-child(odd) {
 					<form role="form">
 						<div class="form-group">
 							<label for="name">名称</label> <input id="teachname" type="text"
-								class="form-control" id="name" placeholder="请输入名称">
+								class="form-control" id="name" onblur="validation(this)"
+								placeholder="请输入名称">
 						</div>
 					</form>
 				</div>
@@ -112,18 +113,20 @@ div.table .file-row:nth-child(odd) {
 					<form role="form">
 						<div class="form-group">
 							<label for="name">名称</label> <input id="enjoyname" type="text"
-								class="form-control" id="name" placeholder="请输入名称">
+								class="form-control" id="name" onblur="validation(this)"
+								placeholder="请输入名称">
 						</div>
 					</form>
 				</div>
 				<div class="tab-pane fade" id="track">
-                    <form role="form">
-                        <div class="form-group">
-                            <label for="name">名称</label> <input id="trackname" type="text"
-                                class="form-control" id="name" placeholder="请输入名称">
-                        </div>
-                    </form>
-                </div>				
+					<form role="form">
+						<div class="form-group">
+							<label for="name">名称</label> <input id="trackname" type="text"
+								class="form-control" id="name" onblur="validation(this)"
+								placeholder="请输入名称">
+						</div>
+					</form>
+				</div>
 			</div>
 		</div>
 		<br>
@@ -198,6 +201,17 @@ div.table .file-row:nth-child(odd) {
                     $("#inputs").show();
                 });
             });
+            
+            function validation( inputobj ) {
+                var checking = false;
+                var txt = inputobj.value;
+                  
+                //只允许汉字、英文字母、数字、下划线！
+                if (!txt.match(/^[\u4E00-\u9FA5a-zA-Z0-9_]{0,}$/)) {
+                    //.match(/^[\u4E00-\u9FA5a-zA-Z0-9_]{3,20}$/) //{3,20}$表示是长度3-20
+                    alert("名称只允许汉字、英文字母、数字、下划线！");
+                }
+            }
         </script>
 		<script>
             // Get the template HTML and remove it from the doument

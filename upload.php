@@ -1,6 +1,5 @@
 <?php
 $ds = DIRECTORY_SEPARATOR; // 1
-
 $storeFolder = 'uploads'; // 2
 $path = $_POST ["path"];
 $name = $_POST ["name"];
@@ -15,11 +14,10 @@ if (! empty ( $_FILES )) {
     if ($path == "ÇúÆ×") {
         write_melody_to_db ( $path, $name, $_FILES ['file'] ['name'] );
     } else {
-        compressfile ( $targetFile );
+        compressfile ( $_FILES ['file'] ['name'], $targetPath );
         write_file_to_db ( $path, $name, $_FILES ['file'] ['name'] );
     }
 }
-
 /**
  * Write the data to database
  *
@@ -59,7 +57,6 @@ function write_file_to_db($type, $albumname, $filename) {
     }
     mysql_close ( $link );
 }
-
 /**
  * Write the data to database
  *
@@ -84,19 +81,25 @@ function write_melody_to_db($type, $path, $filename) {
     
     mysql_close ( $link );
 }
-
 /**
  * Compress file.
  *
  * @param
- *            file targetfile
+ *            filename targetfile
+ *            path targetpath
  */
-function compressfile($targetfile) {
-    $targetfileorg = $targetfile . "." . "org";
-    copy ( $targetfile, $targetfileorg );
+function compressfile($filename, $path) {
+    // This process is to avoid file name has space.
+    $file = "\"" . $filename . "\"";
+    $fileorg = "\"" . $filename . "." . "org" . "\"";
+    
+    $targetfile = $path . $file;
+    $targetfileorg = $path . $fileorg;
+    $copycmd = "cp " . $targetfile . " " . $targetfileorg;
+    shell_exec ( $copycmd );
     $compresscmd = "/home/guoliawa/ffmpeg/ffmpeg -y -i " . $targetfileorg . " -b:v 400k -r 15 -movflags faststart " . $targetfile;
     shell_exec ( $compresscmd );
-    unlink ( $targetfileorg );
+    $rmcmd = "rm " . $targetfileorg;
+    shell_exec ( $rmcmd );
 }
-
 ?>
