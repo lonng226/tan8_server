@@ -263,7 +263,7 @@ switch ($verb) {
                     mkdir ( $attachmentdir . "video/" );
                     move_uploaded_file ( $video ["tmp_name"], $attachmentdir . "video/" . $video ["name"] );
                 }
-                compressfile ( $attachmentdir . "video/" . $video ["name"] );
+//                 compressfile ( $attachmentdir . "video/" . $video ["name"] );
             }
             
             if (isset ( $videopreviewimage )) {
